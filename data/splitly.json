@@ -1,61 +1,35 @@
-[
-  {
-    "id": "58a3d5c2-0b3e-43a9-9823-1605230504c2",
-    "name": "weekend in goa",
-    "createdAt": "2026-09-21T04:55:16.620Z",
-    "members": [
-      {
-        "id": "54d49df0-e8d2-48fa-ac58-0b7d1febeded",
-        "name": "Shreyas"
-      },
-      {
-        "id": "d75afb36-0cea-4ee8-a587-a8c626619425",
-        "name": "Rahul"
-      },
-      {
-        "id": "d05c3ec3-0c17-4402-9862-24a110ff5bc0",
-        "name": "Amit"
-      }
-    ],
-    "expenses": [
-      {
-        "id": "bd050931-e8c8-4d21-82d4-3a1ca8f5d790",
-        "description": "dinner",
-        "amount": 20,
-        "paidBy": "54d49df0-e8d2-48fa-ac58-0b7d1febeded",
-        "createdAt": "2026-09-21T04:55:48.678Z",
-        "shares": [
-          {
-            "userId": "54d49df0-e8d2-48fa-ac58-0b7d1febeded",
-            "amount": 6.66
-          },
-          {
-            "userId": "d75afb36-0cea-4ee8-a587-a8c626619425",
-            "amount": 6.66
-          },
-          {
-            "userId": "d05c3ec3-0c17-4402-9862-24a110ff5bc0",
-            "amount": 6.68
-          }
-        ]
-      }
-    ],
-    "settlements": [],
-    "messages": [
-      {
-        "id": "1abc44f3-9daa-4fb1-b2ba-b37933968372",
-        "userId": "54d49df0-e8d2-48fa-ac58-0b7d1febeded",
-        "content": "added “dinner” — ₹20",
-        "createdAt": "2026-09-21T04:55:48.678Z",
-        "type": "system"
-      },
-      {
-        "id": "87c8c8bc-afce-476c-ad38-a22af7b9183e",
-        "userId": "54d49df0-e8d2-48fa-ac58-0b7d1febeded",
-        "content": "hello \\",
-        "createdAt": "2026-09-21T04:55:53.981Z",
-        "type": "message"
-      }
-    ]
-  }
-]
+{
+  "users": [
+    {
+      "id": "5e0eee7d-2d46-48eb-a087-1c4ba0c431dc",
+      "name": "shreyas",
+      "email": "shreyashknikam@gmail.com",
+      "passwordHash": "50539a54d9b6b1dcd1300cb7d8955941:ac2fe3691621a1ffb37b898cd5a52b2a2efb0dfef770a685e4e9366d44345a24445c601315dd9ff737b76bdb5f58f1d10fddcec80cab3f016a2d0a46aeb7cd93",
+      "createdAt": "2026-09-21T05:12:43.368Z"
+    }
+  ],
+  "sessions": {
+    "be76ab50e389f82e0f106e2e0242dca2e2414c893c4f99b60aeddf25718ebfc6": "5e0eee7d-2d46-48eb-a087-1c4ba0c431dc"
+  },
+  "groups": [
+    {
+      "id": "8c36e347-3047-420d-b311-e5fe7145e1f0",
+      "ownerId": "5e0eee7d-2d46-48eb-a087-1c4ba0c431dc",
+      "name": "weekend in goa",
+      "createdAt": "2026-09-21T05:12:58.210Z",
+      "members": [
+        {
+          "id": "5e0eee7d-2d46-48eb-a087-1c4ba0c431dc",
+          "name": "shreyas"
+        },
+        {
+          "id": "081e54c5-4fa8-4297-8811-4697a29be000",
+          "name": "Amit"
+        }
+      ],
+      "expenses": [],
+      "settlements": [],
+      "messages": []
+    }
+  ]
+}

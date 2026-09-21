@@ -2,6 +2,8 @@
 
 A small, dynamic expense-sharing app built with React, TypeScript, Vite, and an Express API.
 
+Accounts use name, email, and a minimum six-character password. Passwords are salted and hashed on the server; the client retains only a session token. Each account sees only the groups it creates in this MVP.
+
 ### Run locally
 
 ```bash
