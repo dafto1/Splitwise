@@ -1,0 +1,9 @@
+export type Member = { id: string; name: string };
+export type User = { id: string; name: string; email: string };
+export type AuthResponse = { user: User; token: string };
+export type Share = { userId: string; amount: number };
+export type Expense = { id: string; description: string; amount: number; paidBy: string; createdAt: string; shares: Share[] };
+export type Settlement = { id: string; fromUserId: string; toUserId: string; amount: number; createdAt: string };
+export type Message = { id: string; userId: string; content: string; createdAt: string; type?: "system" | "message" };
+export type Group = { id: string; name: string; createdAt: string; members: Member[]; expenses: Expense[]; settlements: Settlement[]; messages: Message[] };
+export type GroupSummary = Pick<Group, "id" | "name" | "createdAt"> & { memberCount: number; totalSpent: number; myBalance: number };
