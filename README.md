@@ -13,11 +13,11 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:5173`. The API starts on port 3001 and stores created data in `data/splitly.json`.
+Open `http://localhost:5173`. The API uses the `PORT` value from `.env`, defaulting to port 3000.
 
 ### Server4
 
-Copy `.env.example` to `.env` and set `SERVER4_URL` to the Server4 origin. During development, Vite proxies `/api/*` requests to that URL; otherwise it uses the included local API server. The UI makes no requests to hardcoded group data.
+Copy `.env.example` to `.env`. During development, Vite proxies `/api/*` requests to `SERVER4_URL` when set, or to the local API server on `PORT` (default 3000).
 
 ### Checks
 

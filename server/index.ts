@@ -14,6 +14,7 @@ type Group = { id: string; ownerId: string; name: string; createdAt: string; mem
 type Session = { token: string; userId: string; createdAt: string };
 type AuthRequest = express.Request & { user?: User };
 
+const PORT = Number(process.env.PORT) || 3000;
 const uri = process.env.MONGODB_URI;
 if (!uri) throw new Error("MONGODB_URI is required. Add it to your .env file.");
 const client = new MongoClient(uri);
@@ -234,7 +235,7 @@ async function start() {
     groups.createIndex({ "members.id": 1 }),
     sessions.createIndex({ token: 1 }, { unique: true })
   ]);
-  app.listen(3001, () => console.log(`Splitly API connected to MongoDB database: ${db.databaseName}`));
+  app.listen(PORT, () => console.log(`Splitly API connected to MongoDB database: ${db.databaseName} on port ${PORT}`));
 }
 start().catch(error => {
   console.error("MongoDB connection failed:", error.message);
