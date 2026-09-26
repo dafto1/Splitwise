@@ -1,0 +1,40 @@
+# --- Version control ---
+.git
+.gitignore
+.gitattributes
+
+# --- Dependencies ---
+node_modules
+venv
+env
+__pycache__
+*.pyc
+
+# --- Environment / secrets ---
+.env
+.env.*
+!.env.example
+
+# --- Build output ---
+dist
+build
+*.log
+coverage
+
+# --- Editor / OS junk ---
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# --- Docker itself ---
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# --- Docs / misc ---
+README.md
+*.md
+.github
+tests
+test

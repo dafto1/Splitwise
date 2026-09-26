@@ -1,4 +1,4 @@
-import { StrictMode, useEffect, useMemo, useState } from "react";
+import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { api } from "./api";
 import type { Group, GroupSummary, User, UserSuggestion } from "./types";
