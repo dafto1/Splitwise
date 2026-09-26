@@ -1,8 +1,7 @@
-import "dotenv/config";
 import cors from "cors";
 import express from "express";
 import { randomBytes, randomUUID, scryptSync, timingSafeEqual } from "crypto";
-import { MongoClient } from "mongodb";
+import type { Db } from "mongodb";
 
 type User = { id: string; name: string; email: string; passwordHash: string; createdAt: string };
 type Member = { id: string; name: string };
@@ -13,15 +12,6 @@ type Message = { id: string; userId: string; content: string; createdAt: string;
 type Group = { id: string; ownerId: string; name: string; createdAt: string; members: Member[]; expenses: Expense[]; settlements: Settlement[]; messages: Message[] };
 type Session = { token: string; userId: string; createdAt: string };
 type AuthRequest = express.Request & { user?: User };
-
-const PORT = Number(process.env.PORT) || 3000;
-const uri = process.env.MONGODB_URI;
-if (!uri) throw new Error("MONGODB_URI is required. Add it to your .env file.");
-const client = new MongoClient(uri);
-const db = client.db(process.env.MONGODB_DB || "splitly");
-const users = db.collection<User>("users");
-const groups = db.collection<Group>("groups");
-const sessions = db.collection<Session>("sessions");
 
 function cents(value: number) { return Math.round(value * 100) / 100; }
 function publicUser(user: User) { return { id: user.id, name: user.name, email: user.email }; }
@@ -39,16 +29,20 @@ function balances(group: Group) {
   });
   return [...totals].map(([userId, amount]) => ({ userId, amount }));
 }
+export function createApp(db: Db) {
+const users = db.collection<User>("users");
+const groups = db.collection<Group>("groups");
+const sessions = db.collection<Session>("sessions");
+const app = express();
+app.use(cors());
+app.use(express.json());
+
 async function groupFor(id: string | string[], userId: string, res: express.Response) {
   const groupId = Array.isArray(id) ? id[0] : id;
   const group = await groups.findOne({ id: groupId, "members.id": userId });
   if (!group) res.status(404).json({ error: "Group not found." });
   return group;
 }
-
-const app = express();
-app.use(cors());
-app.use(express.json());
 
 async function requireAuth(req: AuthRequest, res: express.Response, next: express.NextFunction) {
   try {
@@ -62,6 +56,8 @@ async function requireAuth(req: AuthRequest, res: express.Response, next: expres
     res.status(503).json({ error: "Unable to reach the database. Please try again." });
   }
 }
+
+app.get("/health", (_req, res) => res.json({ status: "ok" }));
 
 app.post("/api/auth/signup", async (req, res) => {
   const name = String(req.body.name || "").trim();
@@ -226,18 +222,5 @@ app.post("/api/groups/:groupId/messages", requireAuth, async (req: AuthRequest, 
   await groups.replaceOne({ id: group.id }, group);
   res.status(201).json(message);
 });
-
-async function start() {
-  await client.connect();
-  await Promise.all([
-    users.createIndex({ email: 1 }, { unique: true }),
-    groups.createIndex({ ownerId: 1 }),
-    groups.createIndex({ "members.id": 1 }),
-    sessions.createIndex({ token: 1 }, { unique: true })
-  ]);
-  app.listen(PORT, () => console.log(`Splitly API connected to MongoDB database: ${db.databaseName} on port ${PORT}`));
+  return app;
 }
-start().catch(error => {
-  console.error("MongoDB connection failed:", error.message);
-  process.exit(1);
-});

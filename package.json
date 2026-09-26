@@ -4,10 +4,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"tsx watch server/index.ts\" \"vite\"",
+    "dev": "concurrently \"tsx watch server/main.ts\" \"vite\"",
     "build": "tsc -b && vite build",
     "check": "tsc --noEmit",
-    "start": "tsx server/index.ts"
+    "start": "tsx server/main.ts",
+    "test": "node --test"
   },
   "dependencies": {
     "cors": "^2.8.5",

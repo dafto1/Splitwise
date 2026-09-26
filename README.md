@@ -22,6 +22,7 @@ Copy `.env.example` to `.env`. During development, Vite proxies `/api/*` request
 ### Checks
 
 ```bash
+npm test
 npm run check
 npm run build
 ```
