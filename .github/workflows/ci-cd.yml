@@ -1,0 +1,81 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+
+  pull_request:
+    branches: [main]
+
+jobs:
+
+  test:
+    name: Lint and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: Type check
+        run: npm run check
+
+  build:
+    name: Docker Build and Smoke Test
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --build-arg GIT_SHA=${{ github.sha }} \
+            -t splitly:${{ github.sha }} .
+
+      - name: Start container
+        run: |
+          docker run -d \
+            --name splitly-test \
+            -p 3000:3000 \
+            splitly:${{ github.sha }}
+
+      - name: Smoke test
+        run: |
+          sleep 5
+          curl -f http://localhost:3000/health
+
+      - name: Stop container
+        if: always()
+        run: docker rm -f splitly-test
+
+  deploy:
+    name: Deploy to Render
+    needs: build
+
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Render deploy
+        run: |
+          curl -fsS -X POST \
+          "${{ secrets.RENDER_DEPLOY_HOOK }}&ref=${{ github.sha }}"

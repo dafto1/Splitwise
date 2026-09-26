@@ -222,5 +222,12 @@ app.post("/api/groups/:groupId/messages", requireAuth, async (req: AuthRequest, 
   await groups.replaceOne({ id: group.id }, group);
   res.status(201).json(message);
 });
+
+app.get("/health", (_req, res) => {
+  res.json({
+    status: "ok",
+    commit: process.env.GIT_SHA || "local",
+  });
+});
   return app;
 }

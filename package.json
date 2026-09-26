@@ -3,13 +3,14 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "concurrently \"tsx watch server/main.ts\" \"vite\"",
-    "build": "tsc -b && vite build",
-    "check": "tsc --noEmit",
-    "start": "tsx server/main.ts",
-    "test": "node --test"
-  },
+ "scripts": {
+  "dev": "concurrently \"tsx watch server/main.ts\" \"vite\"",
+  "build": "tsc -b && vite build",
+  "check": "tsc --noEmit",
+  "lint": "eslint .",
+  "start": "tsx server/main.ts",
+  "test": "node --test"
+},
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^18.0.1",
@@ -19,6 +20,7 @@
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^24.3.0",
@@ -26,8 +28,10 @@
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.2",
     "concurrently": "^9.2.1",
+    "eslint": "^10.11.0",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2",
+    "typescript-eslint": "^8.70.1",
     "vite": "^7.1.4"
   }
 }
