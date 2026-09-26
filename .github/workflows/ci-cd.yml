@@ -8,7 +8,6 @@ on:
     branches: [main]
 
 jobs:
-
   test:
     name: Lint and Test
     runs-on: ubuntu-latest
@@ -50,21 +49,52 @@ jobs:
             --build-arg GIT_SHA=${{ github.sha }} \
             -t splitly:${{ github.sha }} .
 
+      - name: Start MongoDB
+        run: |
+          docker network create splitly-test-network
+          docker run -d \
+            --name splitly-mongo \
+            --network splitly-test-network \
+            mongo:7
+
+          for i in {1..30}; do
+            if docker exec splitly-mongo mongosh --quiet --eval "db.adminCommand('ping')" > /dev/null; then
+              break
+            fi
+            echo "Waiting for MongoDB ($i/30)..."
+            sleep 2
+          done
+
+          docker exec splitly-mongo mongosh --quiet --eval "db.adminCommand('ping')"
+
       - name: Start container
         run: |
           docker run -d \
             --name splitly-test \
+            --network splitly-test-network \
             -p 3000:3000 \
+            -e MONGODB_URI=mongodb://splitly-mongo:27017/splitly \
             splitly:${{ github.sha }}
 
       - name: Smoke test
         run: |
-          sleep 5
-          curl -f http://localhost:3000/health
+          for i in {1..30}; do
+            if curl --fail --silent http://localhost:3000/health; then
+              exit 0
+            fi
+            echo "Waiting for application ($i/30)..."
+            sleep 2
+          done
 
-      - name: Stop container
+          echo "Container logs:"
+          docker logs splitly-test
+          exit 1
+
+      - name: Stop containers
         if: always()
-        run: docker rm -f splitly-test
+        run: |
+          docker rm -f splitly-test splitly-mongo || true
+          docker network rm splitly-test-network || true
 
   deploy:
     name: Deploy to Render
