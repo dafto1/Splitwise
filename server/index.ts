@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import path from "path";
 import { randomBytes, randomUUID, scryptSync, timingSafeEqual } from "crypto";
 import type { Db } from "mongodb";
 
@@ -36,7 +37,9 @@ const sessions = db.collection<Session>("sessions");
 const app = express();
 app.use(cors());
 app.use(express.json());
+const frontendPath = path.resolve(process.cwd(), "dist");
 
+app.use(express.static(frontendPath));
 async function groupFor(id: string | string[], userId: string, res: express.Response) {
   const groupId = Array.isArray(id) ? id[0] : id;
   const group = await groups.findOne({ id: groupId, "members.id": userId });
@@ -229,5 +232,12 @@ app.get("/health", (_req, res) => {
     commit: process.env.GIT_SHA || "local",
   });
 });
+app.use((req, res, next) => {
+  if (req.path.startsWith("/api") || req.path === "/health") {
+    return next();
+  }
+
+  res.sendFile(path.join(frontendPath, "index.html"));
+});  
   return app;
 }
