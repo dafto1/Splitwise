@@ -17,7 +17,7 @@ Open `http://localhost:5173`. The API uses the `PORT` value from `.env`, default
 
 ### Server4
 
-Copy `.env.example` to `.env`. During development, Vite proxies `/api/*` requests to `SERVER4_URL` when set, or to the local API server on `PORT` (default 3000).
+Copy `.env.example` to `.env`. During development, Vite proxies `/api/*` requests to the `SERVER4_URL` value when set, otherwise to the local API server on `PORT` (default 3000). Keep the API on a separate port from Vite (for example, 3000) and avoid pointing `SERVER4_URL` back at `http://localhost:5173`.
 
 ### Checks
 
