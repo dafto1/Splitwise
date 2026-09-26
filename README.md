@@ -2,7 +2,9 @@
 
 A small, dynamic expense-sharing app built with React, TypeScript, Vite, and an Express API.
 
-Accounts use name, email, and a minimum six-character password. Passwords are salted and hashed on the server; the client retains only a session token. Each account sees only the groups it creates in this MVP.
+Accounts use name, email, and a minimum six-character password. Passwords are salted and hashed on the server; the client retains only a session token. Each account sees groups they create or are added to.
+
+Group members must have existing Splitly accounts. Search by name or email when creating a group or adding a member.
 
 ### Run locally
 

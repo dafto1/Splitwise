@@ -1,5 +1,6 @@
 export type Member = { id: string; name: string };
 export type User = { id: string; name: string; email: string };
+export type UserSuggestion = Pick<User, "id" | "name" | "email">;
 export type AuthResponse = { user: User; token: string };
 export type Share = { userId: string; amount: number };
 export type Expense = { id: string; description: string; amount: number; paidBy: string; createdAt: string; shares: Share[] };
